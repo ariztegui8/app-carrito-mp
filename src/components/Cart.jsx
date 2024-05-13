@@ -19,11 +19,11 @@ const Cart = () => {
         const body = {
             items: orderItems,
             back_urls: {
-                success: `${process.env.NEXT_PUBLIC_API_BASE_URL}/success`,
-                failure: `${process.env.NEXT_PUBLIC_API_BASE_URL}/failure`,
-                pending: `${process.env.NEXT_PUBLIC_API_BASE_URL}/pending`,
+                success: `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/success`,
+                failure: `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/failure`,
+                pending: `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/pending`,
             },
-            notification_url: "https://70a5-190-193-195-47.ngrok-free.app/webhook",
+            notification_url: "https://1e2e-190-193-195-47.ngrok-free.app/api/webhook",
         };
 
         try {
