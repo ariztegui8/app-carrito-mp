@@ -1,20 +1,51 @@
 'use client'
 import React from 'react'
 import useCart from '@/hooks/useCart'
+import axios from 'axios';
 
 const Cart = () => {
     const { cartItems, removeFromCart } = useCart();
 
     const total = cartItems.reduce((sum, item) => sum + item.quantity * item.price, 0);
 
-    console.log('total', total);
+    const handleCheckout = async () => {
+        const orderItems = cartItems.map(item => ({
+            title: item.title,
+            unit_price: item.price,
+            currency_id: "ARS",
+            quantity: item.quantity
+        }));
+
+        const body = {
+            items: orderItems,
+            back_urls: {
+                success: `${process.env.NEXT_PUBLIC_API_BASE_URL}/success`,
+                failure: `${process.env.NEXT_PUBLIC_API_BASE_URL}/failure`,
+                pending: `${process.env.NEXT_PUBLIC_API_BASE_URL}/pending`,
+            },
+            notification_url: "https://70a5-190-193-195-47.ngrok-free.app/webhook",
+        };
+
+        try {
+            const response = await axios.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/create-order`, body, {
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            });
+            console.log('Order response:', response.data);
+            window.location.href = response.data.init_point;
+            // Manejar la redirección o actualización del estado aquí
+        } catch (error) {
+            console.error('Error creating order:', error.response ? error.response.data : error.message);
+        }
+    };
 
     return (
         <>
             {cartItems.length === 0 ?
-               <div className='container mx-auto flex justify-center items-center h-screen'>
+                <div className='container mx-auto flex justify-center items-center h-screen'>
                     <p className='text-4xl'>No hay productos en el carrito</p>
-                </div>  
+                </div>
                 :
                 <div className='container mx-auto grid grid-cols-[60%_40%] gap-4 items-start py-6'>
                     <div className='rounded-xl shadow-md p-6'>
@@ -53,7 +84,7 @@ const Cart = () => {
                             <p className='text-xl font-bold'>${total}</p>
                         </div>
                         <div>
-                            <button className='p-2 text-white bg-blue-700 cursor-pointer rounded-xl w-full'>Comprar</button>
+                            <button onClick={handleCheckout} className='p-2 text-white bg-blue-700 cursor-pointer rounded-xl w-full'>Comprar</button>
                         </div>
                     </div>
                 </div>
