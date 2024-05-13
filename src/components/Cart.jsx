@@ -23,7 +23,7 @@ const Cart = () => {
                 failure: `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/failure`,
                 pending: `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/pending`,
             },
-            notification_url: "https://1e2e-190-193-195-47.ngrok-free.app/api/webhook",
+            notification_url: "https://1c75-186-136-76-159.ngrok-free.app/api/webhook",
         };
 
         try {
